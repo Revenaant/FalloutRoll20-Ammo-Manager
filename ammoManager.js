@@ -1,26 +1,30 @@
-// TODO account for mechanics like Laser Muskets, which specially consume 2/3 ammo per shot. (search for "Hungry 2" in description or smth. Manually add.)
-// BUG if the change was from X to Y, where X > Fire Rate and Y is 0, then bail. There's some error. likely.
-// BUG, when adding mod (308 -> .50) the ammo count updates to new value correctly, but not viceversa.
-
-/* SPECIAL WEAPONS
-/ Example, the Syringer which uses different ammo types, or Gatling Laser, which can use Fusion Cells or Cores
-/ All such cases need to be handled manually (or edit the ammo type to match something in gear).
-*/
-
-/* PERKS
-/ Unhandled perks because they're conditional: Quick Hands, Gun Fu, Accurate weapon quality.
-/ Conditional extra damage perks (Black Widow/Lady Killer, Mr Sandman, Nerd Rage) - Should be handled as an attack cannot consume more than 1+fireRate ammo.
-/ Weapon Type perks (Commando, Rifleman, Gunslinger, Laser Commander, Pyromaniac, Size Matters) - player should manually modify the weapon damage rating in their sheet.
-*/
-
-/* MODS
-/ Weapon mods are handled, as they modify the weapon's damage rating and fire rate in the sheet.
-*/
-
-/* OTHER NOTES
-/ Weapon names in the weapons section of the character sheet should be made unique. Otherwise the wrong weapon stats may be used.
-/ Gatling - when asked to spend additional dice, player should input 2x the number they want to spend in ammo. E.g. Input 10 extra DC to use fire rate 5.
-*/
+/**
+ * This is a Roll20 script for Fallout2d20, using the official Roll20 sheets.
+ * There's two parts to it:
+ * Automatic ammo reduction when firing a shot - as well as checking you have enough ammo to shoot.
+ * And a validator that should sync the number on all weapons and ammo gear that use the same type of ammo, when any of those values change.
+ * 
+ * -------------------------------------------------------------------------------
+ * SPECIAL WEAPONS
+ * Example, the Syringer which uses different ammo types, or Gatling Laser, which can use Fusion Cells or Cores
+ * All such cases need to be handled manually (or edit the ammo type to match something in gear).
+ * 
+ * PERKS
+ * Unhandled perks because they're conditional: Quick Hands, Gun Fu, Accurate weapon quality.
+ * Conditional extra damage perks (Black Widow/Lady Killer, Mr Sandman, Nerd Rage) - Should be handled as an attack cannot consume more than 1+fireRate ammo.
+ * Weapon Type perks (Commando, Rifleman, Gunslinger, Laser Commander, Pyromaniac, Size Matters) - player should manually modify the weapon damage rating in their sheet.
+ * 
+ * MODS
+ * Weapon mods are handled, as they modify the weapon's damage rating and fire rate in the sheet.
+ * 
+ * OTHER NOTES
+ * Weapon names in the weapons section of the character sheet should be made unique. Otherwise the wrong weapon stats may be used.
+ * Gatling - when asked to spend additional dice, player should input 2x the number they want to spend in ammo. E.g. Input 10 extra DC to use fire rate 5.
+ * 
+ * ISSUES
+ * TODO account for stuff like Laser Muskets, which specially consume 2/3 ammo per shot. (search for "Hungry 2" in description or smth. Manually add.)
+ * BUG when adding mod (308 -> .50) the ammo count updates to new value correctly, but not viceversa.
+ */
 
 function ValidateIsTemplate(msg, templateName) {
     return msg.rolltemplate === templateName;
